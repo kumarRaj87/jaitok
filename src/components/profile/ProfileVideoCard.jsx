@@ -473,17 +473,23 @@
 
 // export default ProfileVideoCard;
 
-
-import { Bookmark, MessageCircle, Share2, MoreHorizontal, Edit, Trash2, X } from 'lucide-react';
-import React, { useRef, useEffect, useState } from 'react';
-import { FaHeart } from 'react-icons/fa6';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import CommentModal from './VideoCommentModal';
-import VideoShareModal from './VideoShareModal';
+import {
+  Bookmark,
+  MessageCircle,
+  Share2,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+  X,
+} from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { FaHeart } from "react-icons/fa6";
+import axios from "axios";
+import { toast } from "react-toastify";
+import CommentModal from "./VideoCommentModal";
+import VideoShareModal from "./VideoShareModal";
 
 const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
-
   const videoRef = useRef(null);
   const [showMenu, setShowMenu] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -491,13 +497,14 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(video?.totalLikes || 0);
   const [editForm, setEditForm] = useState({
-    title: video?.title || '',
-    description: video?.description || '',
-    visibility: video?.visibility || 'public',
+    title: video?.title || "",
+    description: video?.description || "",
+    visibility: video?.visibility || "public",
     allowDuet: video?.allowDuet !== undefined ? video?.allowDuet : true,
     allowStitch: video?.allowStitch !== undefined ? video?.allowStitch : true,
-    allowComments: video?.allowComments !== undefined ? video?.allowComments : true,
-    isActive: video?.isActive !== undefined ? video?.isActive : true
+    allowComments:
+      video?.allowComments !== undefined ? video?.allowComments : true,
+    isActive: video?.isActive !== undefined ? video?.isActive : true,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -539,14 +546,14 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (showMenu && !event.target.closest('.options-menu')) {
+      if (showMenu && !event.target.closest(".options-menu")) {
         setShowMenu(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showMenu]);
 
@@ -557,15 +564,15 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
           `https://jaitok-api.jaitia.com/interactions/interactions/videos/${video.id}/unlike`,
           {
             headers: {
-              'Accept': 'application/json',
-              'access-token': authToken
-            }
+              Accept: "application/json",
+              "access-token": authToken,
+            },
           }
         );
 
         if (response.data.success) {
           setIsLiked(false);
-          setLikeCount(prev => Math.max(0, prev - 1));
+          setLikeCount((prev) => Math.max(0, prev - 1));
           toast.success("Video unliked successfully!");
         }
       } else {
@@ -574,33 +581,37 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
           {},
           {
             headers: {
-              'Accept': 'application/json',
-              'access-token': authToken
-            }
+              Accept: "application/json",
+              "access-token": authToken,
+            },
           }
         );
 
         if (response.data.success) {
           setIsLiked(true);
-          setLikeCount(prev => prev + 1);
+          setLikeCount((prev) => prev + 1);
           toast.success("Video liked successfully!");
         }
       }
     } catch (err) {
-      console.error('Error toggling like:', err);
-      toast.error(err.response?.data?.message || 'Failed to update like status. Please try again.');
+      console.error("Error toggling like:", err);
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to update like status. Please try again."
+      );
     }
   };
 
   const handleEdit = () => {
     setEditForm({
-      title: video?.title || '',
-      description: video?.description || '',
-      visibility: video?.visibility || 'public',
+      title: video?.title || "",
+      description: video?.description || "",
+      visibility: video?.visibility || "public",
       allowDuet: video?.allowDuet !== undefined ? video?.allowDuet : true,
       allowStitch: video?.allowStitch !== undefined ? video?.allowStitch : true,
-      allowComments: video?.allowComments !== undefined ? video?.allowComments : true,
-      isActive: video?.isActive !== undefined ? video?.isActive : true
+      allowComments:
+        video?.allowComments !== undefined ? video?.allowComments : true,
+      isActive: video?.isActive !== undefined ? video?.isActive : true,
     });
     setShowEditModal(true);
     setShowMenu(false);
@@ -619,24 +630,27 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
         `https://jaitok-api.jaitia.com/interactions/videos/${video.id}`,
         {
           headers: {
-            'Accept': 'application/json',
-            'access-token': authToken
-          }
+            Accept: "application/json",
+            "access-token": authToken,
+          },
         }
       );
 
       if (response.data.success) {
         toast.success("Video deleted successfully!");
-        if (typeof fetchUserVideos === 'function') {
+        if (typeof fetchUserVideos === "function") {
           fetchUserVideos();
         }
         setShowDeleteConfirm(false);
       } else {
-        throw new Error(response.data.message || 'Failed to delete video');
+        throw new Error(response.data.message || "Failed to delete video");
       }
     } catch (err) {
-      console.error('Error deleting video:', err);
-      toast.error(err.response?.data?.message || 'Failed to delete video. Please try again.');
+      console.error("Error deleting video:", err);
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to delete video. Please try again."
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -644,9 +658,9 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setEditForm(prev => ({
+    setEditForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -665,33 +679,39 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
           allowDuet: editForm.allowDuet,
           allowStitch: editForm.allowStitch,
           allowComments: editForm.allowComments,
-          isActive: editForm.isActive
+          isActive: editForm.isActive,
         },
         {
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'access-token': authToken
-          }
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "access-token": authToken,
+          },
         }
       );
 
       if (response.data.success) {
-        if (typeof onVideoUpdate === 'function') {
+        if (typeof onVideoUpdate === "function") {
           onVideoUpdate(video.id, response.data.data);
         }
-        if (typeof fetchUserVideos === 'function') {
+        if (typeof fetchUserVideos === "function") {
           fetchUserVideos();
         }
         setShowEditModal(false);
         toast.success("Video updated successfully!");
       } else {
-        throw new Error(response.data.message || 'Failed to update video');
+        throw new Error(response.data.message || "Failed to update video");
       }
     } catch (err) {
-      console.error('Error updating video:', err);
-      setError(err.response?.data?.message || 'Failed to update video. Please try again.');
-      toast.error(err.response?.data?.message || 'Failed to update video. Please try again.');
+      console.error("Error updating video:", err);
+      setError(
+        err.response?.data?.message ||
+          "Failed to update video. Please try again."
+      );
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to update video. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -715,7 +735,9 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
 
       <div className="absolute bottom-5 left-4 text-white pr-16">
         <h3 className="font-bold text-lg truncate">{video.title}</h3>
-        <p className="text-sm text-gray-100 line-clamp-2">{video.description}</p>
+        <p className="text-sm text-gray-100 line-clamp-2">
+          {video.description}
+        </p>
       </div>
 
       {userId === video.user?.id && (
@@ -724,7 +746,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
             onClick={() => setShowMenu(!showMenu)}
             className="flex items-center justify-center p-2 bg-white bg-opacity-30 rounded-full hover:bg-opacity-100 transition shadow-md"
           >
-            <MoreHorizontal className="text-gray-100 hover:text-gray-900" size={20} />
+            <MoreHorizontal
+              className="text-gray-100 hover:text-gray-900"
+              size={20}
+            />
           </button>
 
           {showMenu && (
@@ -751,17 +776,32 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
       <div className="absolute right-4 bottom-5 flex flex-col items-center gap-3">
         <button
           onClick={handleLikeToggle}
-          className={`flex items-center justify-center p-2.5 bg-white bg-opacity-30 rounded-full hover:bg-red-500 hover:text-white transition-all backdrop-blur-sm shadow-md ${isLiked ? 'bg-red-500' : ''}`}
+          className={`flex items-center justify-center p-2.5 bg-white bg-opacity-30 rounded-full hover:bg-red-500 hover:text-white transition-all backdrop-blur-sm shadow-md ${
+            isLiked ? "bg-red-500" : ""
+          }`}
         >
-          <FaHeart className={`${isLiked ? 'text-white' : 'text-red-500 hover:text-white'}`} size={18} />
-          <span className={`text-xs ml-1.5 font-medium ${isLiked ? 'text-white' : 'text-gray-800'}`}>{likeCount}</span>
+          <FaHeart
+            className={`${
+              isLiked ? "text-white" : "text-red-500 hover:text-white"
+            }`}
+            size={18}
+          />
+          <span
+            className={`text-xs ml-1.5 font-medium ${
+              isLiked ? "text-white" : "text-gray-800"
+            }`}
+          >
+            {likeCount}
+          </span>
         </button>
         <button
           onClick={() => setShowCommentModal(true)}
           className="flex items-center justify-center p-2.5 bg-white bg-opacity-30 rounded-full hover:bg-blue-500 hover:text-white transition-all backdrop-blur-sm shadow-md"
         >
           <MessageCircle className="text-blue-500 hover:text-white" size={18} />
-          <span className="text-xs ml-1.5 text-gray-800 font-medium">{video.totalComments || 0}</span>
+          <span className="text-xs ml-1.5 text-gray-800 font-medium">
+            {video.totalComments || 0}
+          </span>
         </button>
         <button className="flex items-center justify-center p-2.5 bg-white bg-opacity-30 rounded-full hover:bg-yellow-500 hover:text-white transition-all backdrop-blur-sm shadow-md">
           <Bookmark className="text-yellow-500 hover:text-white" size={18} />
@@ -770,14 +810,23 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
           <Share2 className="text-green-500 hover:text-white" size={18} />
           <span className="text-xs ml-1.5 text-gray-800 font-medium">{video.totalShares || 0}</span>
         </button> */}
-         <button
+        <button
           onClick={() => setShowShareModal(true)}
           className={`flex items-center justify-center p-2.5 rounded-full transition-all backdrop-blur-sm shadow-md ${
-            video.totalShares > 0 ? 'bg-green-500' : 'bg-white bg-opacity-30 hover:bg-green-500'
+            video.totalShares > 0
+              ? "bg-green-500"
+              : "bg-white bg-opacity-30 hover:bg-green-500"
           }`}
         >
-          <Share2 className={video.totalShares > 0 ? 'text-white' : 'text-green-500'} size={18} />
-          <span className={`text-xs ml-1.5 font-medium ${video.totalShares > 0 ? 'text-white' : 'text-gray-800'}`}>
+          <Share2
+            className={video.totalShares > 0 ? "text-white" : "text-green-500"}
+            size={18}
+          />
+          <span
+            className={`text-xs ml-1.5 font-medium ${
+              video.totalShares > 0 ? "text-white" : "text-gray-800"
+            }`}
+          >
             {video.totalShares || 0}
           </span>
         </button>
@@ -804,7 +853,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="title">
+                <label
+                  className="block text-gray-700 text-sm font-medium mb-1"
+                  htmlFor="title"
+                >
                   Title
                 </label>
                 <input
@@ -819,7 +871,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="description">
+                <label
+                  className="block text-gray-700 text-sm font-medium mb-1"
+                  htmlFor="description"
+                >
                   Description
                 </label>
                 <textarea
@@ -833,7 +888,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="visibility">
+                <label
+                  className="block text-gray-700 text-sm font-medium mb-1"
+                  htmlFor="visibility"
+                >
                   Visibility
                 </label>
                 <select
@@ -859,7 +917,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
                     onChange={handleInputChange}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label className="ml-2 text-sm text-gray-700" htmlFor="allowDuet">
+                  <label
+                    className="ml-2 text-sm text-gray-700"
+                    htmlFor="allowDuet"
+                  >
                     Allow Duet
                   </label>
                 </div>
@@ -872,7 +933,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
                     onChange={handleInputChange}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label className="ml-2 text-sm text-gray-700" htmlFor="allowStitch">
+                  <label
+                    className="ml-2 text-sm text-gray-700"
+                    htmlFor="allowStitch"
+                  >
                     Allow Stitch
                   </label>
                 </div>
@@ -885,7 +949,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
                     onChange={handleInputChange}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label className="ml-2 text-sm text-gray-700" htmlFor="allowComments">
+                  <label
+                    className="ml-2 text-sm text-gray-700"
+                    htmlFor="allowComments"
+                  >
                     Allow Comments
                   </label>
                 </div>
@@ -898,7 +965,10 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
                     onChange={handleInputChange}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label className="ml-2 text-sm text-gray-700" htmlFor="isActive">
+                  <label
+                    className="ml-2 text-sm text-gray-700"
+                    htmlFor="isActive"
+                  >
                     Active
                   </label>
                 </div>
@@ -915,9 +985,11 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+                  className={`px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${
+                    isSubmitting ? "opacity-75 cursor-not-allowed" : ""
+                  }`}
                 >
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  {isSubmitting ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </form>
@@ -939,7 +1011,8 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
             </div>
 
             <div className="text-gray-600 mb-6">
-              Are you sure you want to delete this video? This action cannot be undone.
+              Are you sure you want to delete this video? This action cannot be
+              undone.
             </div>
 
             <div className="flex justify-end gap-3">
@@ -953,9 +1026,11 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
               <button
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className={`px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition ${isDeleting ? 'opacity-75 cursor-not-allowed' : ''}`}
+                className={`px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition ${
+                  isDeleting ? "opacity-75 cursor-not-allowed" : ""
+                }`}
               >
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                {isDeleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
@@ -970,13 +1045,16 @@ const ProfileVideoCard = ({ video, onVideoUpdate, fetchUserVideos }) => {
         />
       )}
 
-<VideoShareModal
+      <VideoShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         video={video}
         onShareSuccess={() => {
-          if (typeof onVideoUpdate === 'function') {
-            onVideoUpdate(video.id, { ...video, totalShares: (video.totalShares || 0) + 1 });
+          if (typeof onVideoUpdate === "function") {
+            onVideoUpdate(video.id, {
+              ...video,
+              totalShares: (video.totalShares || 0) + 1,
+            });
           }
         }}
       />

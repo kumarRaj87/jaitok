@@ -1,15 +1,5 @@
 import React from 'react';
 import { 
-  Home,
-  Compass,
-  Users,
-  Upload,
-  Activity,
-  MessageCircle,
-  Video,
-  User,
-  MoreHorizontal,
-  Search,
   CheckCircle
 } from 'lucide-react';
 
@@ -30,33 +20,39 @@ function Friends() {
   ];
 
   return (
-    <div className="flex h-screen bg-white pl-72">
-      
+    <div className="flex min-h-screen bg-white lg:pl-64 pl-4 p-4">
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
+        <div className="mx-auto grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-6">
           {suggestedAccounts.map((account, index) => (
-            <div key={index} className="relative group overflow-hidden rounded-lg aspect-[3/4] cursor-pointer w-[300px] h-[350px]">
+            <div 
+              key={index} 
+              className="relative group overflow-hidden rounded-lg aspect-[3/4] cursor-pointer w-full h-full min-h-[250px]"
+            >
               <img
                 src={account.image}
                 alt={account.name}
-                className="w-[300px] h-[350px] object-cover transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 w-[300px] h-[350px]">
-                <div className="absolute top-4 left-4">
-                  <div className={`${account.color} w-12 h-12 rounded-full flex items-center justify-center`}>
-                    <span className="text-white font-bold">{account.name.split(' ')[0]}</span>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60">
+                <div className="absolute top-3 left-3">
+                  <div className={`${account.color} w-10 h-10 rounded-full flex items-center justify-center`}>
+                    <span className="text-white font-bold text-xs">
+                      {account.name.split(' ')[0].charAt(0)}
+                    </span>
                   </div>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <div className="flex items-center mb-2">
-                    <h3 className="text-white font-bold text-lg mr-2">{account.name}</h3>
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <div className="flex items-center mb-1">
+                    <h3 className="text-white font-bold text-sm md:text-base mr-1 truncate">
+                      {account.name}
+                    </h3>
                     {account.verified && (
-                      <CheckCircle className="w-5 h-5 text-blue-500 fill-current" />
+                      <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-blue-500 fill-current flex-shrink-0" />
                     )}
                   </div>
-                  <p className="text-white/80 text-sm mb-3">@{account.username}</p>
-                  <button className="w-full bg-[#FE2C55] text-white py-2.5 rounded-md font-semibold hover:bg-[#e62a4f] transition-colors">
+                  <p className="text-white/80 text-xs md:text-sm mb-2 truncate">@{account.username}</p>
+                  <button className="w-full bg-[#FE2C55] text-white py-1.5 md:py-2 rounded text-sm md:text-base font-semibold hover:bg-[#e62a4f] transition-colors">
                     Follow
                   </button>
                 </div>
