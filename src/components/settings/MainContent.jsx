@@ -32,8 +32,8 @@ function MainContent() {
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div className="flex flex-col h-[80vh] w-3/4 bg-white text-[#161823] rounded-xl border-[1px] border-gray-200 my-5 overflow-y-auto" id="settings">
-            <div className="max-w-3xl mx-auto pt-2 px-6 pb-4">
+        <div className="flex flex-col h-[80vh] w-full bg-white text-[#161823] rounded-xl border-[1px] border-gray-200 my-5 overflow-y-auto" id="settings">
+            <div className="w-full mx-auto pt-2 px-6 pb-4">
                 <section id="manage-account" className="pt-4">
                     <h1 className="text-2xl font-bold mb-8">Manage account</h1>
 
